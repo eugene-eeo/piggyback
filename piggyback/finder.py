@@ -26,8 +26,8 @@ def strip_path(stream, path):
 
 def filter_files(stream, prefix, suffix):
     for filename in stream:
-        if (filename.startswith(prefix) and
-            filename.endswith(suffix)):
+        if filename.startswith(prefix) and \
+           filename.endswith(suffix):
             yield filename
 
 
