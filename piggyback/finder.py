@@ -36,18 +36,19 @@ class Finder(object):
     ignored = staticmethod(lambda x: x.startswith('__'))
 
     def __init__(self, path, prefix='', suffix='.py'):
-        self.path = os.path.abspath(path)
+        self.path = os.path.dirname(path)
+        self.root = os.path.abspath(path)
         self.root_module = os.path.basename(path)
         self.prefix = prefix
         self.suffix = suffix
 
     @property
     def is_package(self):
-        return os.path.isdir(self.path)
+        return os.path.isdir(self.root)
 
     def find_nested_modules(self):
-        stream = traverse(self.path, hint_function=self.hint)
-        stream = strip_path(stream, self.path)
+        stream = traverse(self.root, hint_function=self.hint)
+        stream = strip_path(stream, self.root)
         stream = filter_files(
             stream,
             self.prefix,
@@ -59,7 +60,5 @@ class Finder(object):
 
     def find_modules(self):
         if not self.is_package:
-            yield self.root_module
-            return
-        for item in self.find_nested_modules():
-            yield item
+            return [self.root_module]
+        return self.find_nested_modules()
