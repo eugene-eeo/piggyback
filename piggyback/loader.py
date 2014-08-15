@@ -10,7 +10,7 @@ def path_context(path):
     into sys.path and then safely guarantee that the path
     was removed from sys.path once the block exits.
     """
-    sys.path.append(path)
+    sys.path.insert(1, path)
     try:
         yield
     finally:
