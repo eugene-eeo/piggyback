@@ -2,6 +2,15 @@ import os
 
 
 def traverse(path, hint_function):
+    """
+    Traverse the directory (depth-first) recursively, and
+    yields all of the files of the directory.
+
+    :param path: The path.
+    :param hint_function: A function to determine whether
+        to traverse the current directory. It is called
+        with the contents of each directory.
+    """
     files = os.listdir(path)
     if not hint_function(files):
         return
@@ -17,6 +26,16 @@ def traverse(path, hint_function):
 
 
 def strip_path(stream, path):
+    """
+    Strip the paths from the stream of paths of a
+    prefix.
+
+    :param stream: The stream of paths.
+    :param path: The prefix common to all of the
+        paths (this fact wouldn't be checked by
+        the function). It needn't end with the
+        path separator.
+    """
     length = len(path)
     if not path.endswith(os.path.sep):
         length += len(os.path.sep)
@@ -25,13 +44,30 @@ def strip_path(stream, path):
 
 
 def filter_files(stream, prefix, suffix):
-    for filename in stream:
-        if filename.startswith(prefix) and \
-           filename.endswith(suffix):
-            yield filename
+    """
+    Filters the files based on whether they start
+    with a prefix or end with a suffix.
+
+    :param stream: The stream of paths.
+    :param prefix: The desired prefix.
+    :param suffix: The desired suffix.
+    """
+    for path in stream:
+        if path.startswith(prefix) and path.endswith(suffix):
+            yield path
 
 
 class Finder(object):
+    """
+    Create a finder object for the given path.
+
+    :param path: The path.
+    :param prefix: Only load files that start
+        with this prefix.
+    :param suffix: Only load files that end with
+        this suffix (can be combined with the
+        prefix option).
+    """
     hints = [lambda x: '__init__.py' in x]
     ignored = [lambda x: x.startswith('__')]
 
@@ -44,13 +80,31 @@ class Finder(object):
 
     @property
     def is_package(self):
+        """
+        Returns a value telling if the path under the
+        finder object is a package.
+        """
         return os.path.isdir(self.root)
 
-    def find_nested_modules(self):
+    @property
+    def hint_function(self):
+        """
+        Returns the hint function for the finder object.
+        The hint function basically checks if the path
+        conforms to all of the hints in the `hints`
+        attribute.
+        """
         def hint(path):
             return all(f(path) for f in self.hints)
+        return hint
 
-        stream = traverse(self.root, hint_function=hint)
+    def find_nested_modules(self):
+        """
+        Look for nested modules. To be called only when
+        the finder object is a package (dictated by the
+        `is_package` property).
+        """
+        stream = traverse(self.root, hint_function=self.hint_function)
         stream = strip_path(stream, self.root)
         stream = filter_files(
             stream,
@@ -63,6 +117,11 @@ class Finder(object):
                 yield item
 
     def find_modules(self):
+        """
+        Finds the modules under path of the finder object.
+        Returns either the root path or the found modules
+        depending on whether the finder object is a package.
+        """
         if not self.is_package:
             return [self.root_module]
         return self.find_nested_modules()
