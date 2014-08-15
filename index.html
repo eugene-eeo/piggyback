@@ -28,27 +28,47 @@
         </ul>
       </header>
       <section>
-        <h1>
-<a name="piggyback" class="anchor" href="#piggyback"><span class="octicon octicon-link"></span></a>piggyback</h1>
+        <pre><code>Python  _                     _             _
+   _ __(_)__ _ __ _ _  _ _  _| |__  __ _ __| |__
+  | '_ \ / _` / _` | || | || | '_ \/ _` / _| / /
+  | .__/_\__, \__, |\_, |\_, |_.__/\__,_\__|_\_\
+  |_|    |___/|___/ |__/ |__/
+</code></pre>
 
 <p>Python package for finding modules recursively and then
 importing them. Useful for scripts/libraries which expose
 DSL-like stuff, like test suites and configuration.</p>
 
+<p>Development goals include extensibility and stability. We
+aim for a robust API that although doesn't do much does what
+it does well. Currently we think that we've reached those
+goals.</p>
+
 <div class="highlight highlight-python"><pre><span class="kn">from</span> <span class="nn">piggyback.finder</span> <span class="kn">import</span> <span class="n">Finder</span>
 <span class="kn">from</span> <span class="nn">piggyback.lookup</span> <span class="kn">import</span> <span class="n">Loader</span>
 
-<span class="n">importer</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">Finder</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">importer</span><span class="o">.</span><span class="n">look</span><span class="p">(</span><span class="s">'.'</span><span class="p">):</span>
+<span class="n">importer</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">Finder</span><span class="p">(</span><span class="s">'path'</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">importer</span><span class="o">.</span><span class="n">search</span><span class="p">():</span>
     <span class="k">print</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 
-<span class="n">cache</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">import_all</span><span class="p">(</span><span class="s">'.'</span><span class="p">)</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">import_all</span><span class="p">()</span>
 <span class="n">module</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="s">'module.name'</span><span class="p">]</span>
 </pre></div>
 
 <p>Let Piggyback manage all the hackery required for you and
 go write some code. No more manual <code>execfiles</code> and namespace
-management madness.</p>
+management madness. Piggyback does importing and namespaces
+right, namely:</p>
+
+<ul>
+<li><p>We isolate every <code>__import__</code>ed module, and their namespaces
+are separate of one another, as well as the current module.
+No namespace clashes.</p></li>
+<li><p>The <code>sys.path</code> variable remains unchanged at the end of the
+importing- Piggyback will ensure that the <code>sys.path</code> is
+cleansed of all appended paths once we are finished with
+the importing.</p></li>
+</ul>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/eugene-eeo">eugene-eeo</a></p>
