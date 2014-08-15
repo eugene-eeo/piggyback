@@ -27,13 +27,18 @@ def filename_to_module(path):
     return path[:-3].replace(os.path.sep, '.')
 
 
-def strip_root_module(module):
-    return module.split('.', 1)[1]
+def import_module(root, package):
+    """
+    Import a module and then return the module object itself.
+    Note that this function does some ``getattr`` behind the
+    scenes in order to fetch the "real" module, and not the
+    root module.
 
-
-def import_module(package):
-    module = __import__(package, {}, {})
-    for item in package.split('.')[1:]:
+    :param package: The module to import.
+    """
+    module_name = '%s.%s' % (root, package)
+    module = __import__(module_name, {}, {})
+    for item in package.split('.'):
         module = getattr(module, item)
         if not isinstance(module, ModuleType):
             raise ImportError("No module named '%s'" % (item))
@@ -74,18 +79,19 @@ class Loader(object):
         the path intact, i.e. if you look for modules under
         `test` you will get `mod1`, `mod2`, etc.
         """
+        root = self.finder.module_root
         with path_context(self.finder.path):
             cache = {}
             for module in self.search():
-                module_path = '%s.%s' % (self.finder.module_root, module)
-                cache[module] = import_module(module_path)
+                cache[module] = import_module(root, module)
             return cache
 
     def load(self, desired):
+        """
+        Load a *desired* module from the search path, and
+        return the module object.
+
+        :param desired: The desired module.
+        """
         with path_context(self.finder.path):
-            for module in self.search():
-                if module != desired:
-                    continue
-                module = '%s.%s' % (self.finder.module_root, module)
-                return import_module(module)
-        raise ImportError('Module %s not found' % (desired))
+            return import_module(self.finder.module_root, desired)
