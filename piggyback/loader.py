@@ -39,7 +39,7 @@ def import_module(root, package):
     module_name = '%s.%s' % (root, package)
     module = __import__(module_name, {}, {})
     for item in package.split('.'):
-        module = getattr(module, item)
+        module = getattr(module, item, None)
         if not isinstance(module, ModuleType):
             raise ImportError("No module named '%s'" % (item))
     return module
