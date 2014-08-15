@@ -40,3 +40,5 @@ right, namely:
   importing- Piggyback will ensure that the `sys.path` is
   cleansed of all appended paths once we are finished with
   the importing.
+
+![Build Status](https://travis-ci.org/eugene-eeo/piggyback.svg)
