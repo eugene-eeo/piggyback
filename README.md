@@ -19,11 +19,11 @@ goals.
 from piggyback.finder import Finder
 from piggyback.lookup import Loader
 
-importer = Loader(Finder)
-for module in importer.look('path/'):
+importer = Loader(Finder('path'))
+for module in importer.search():
     print(module)
 
-cache = importer.import_all('path/')
+cache = importer.import_all()
 module = cache['module.name']
 ```
 

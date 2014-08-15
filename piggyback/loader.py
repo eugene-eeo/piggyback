@@ -1,5 +1,6 @@
 import os
 import sys
+from types import ModuleType
 from contextlib import contextmanager
 
 
@@ -30,6 +31,15 @@ def strip_root_module(module):
     return module.split('.', 1)[1]
 
 
+def import_module(package):
+    module = __import__(package, {}, {})
+    for item in package.split('.')[1:]:
+        module = getattr(module, item)
+        if not isinstance(module, ModuleType):
+            raise ImportError("No module named '%s'" % (item))
+    return module
+
+
 class Loader(object):
     """
     Create a loader object with the given finder class and
@@ -39,29 +49,16 @@ class Loader(object):
     :parma option: Options to provide for the finder class
         when it is requested.
     """
-    def __init__(self, finder, **options):
+    def __init__(self, finder):
         self.finder = finder
-        self.options = options
 
-    def get_finder(self, path):
-        """
-        Get a finder object for a given path. Takes the
-        options that this loader object was instantiated
-        with into account.
-
-        :param path: The path.
-        """
-        return self.finder(path, **self.options)
-
-    def list_modules(self, finder):
+    def search(self):
         """
         List the modules found by a given finder. Does not
         actually import anything.
-
-        :param finder: A finder object.
         """
-        iterable = finder.find_modules()
-        if not finder.is_package:
+        iterable = self.finder.find_modules()
+        if not self.finder.is_package:
             yield next(iterable)
             return
 
@@ -69,43 +66,26 @@ class Loader(object):
             child = filename_to_module(item)
             yield child
 
-    def look(self, path):
-        """
-        Look for the modules found in a given path. Calls
-        the `list_modules` method to determine the modules.
-
-        :param path: The path to look for.
-        """
-        finder = self.get_finder(path)
-        iterable = self.list_modules(finder)
-        for item in iterable:
-            yield item
-
-    def import_all(self, path):
+    def import_all(self):
         """
         Import all of the modules under the given path and
         stores them (according to their name) in a
         dictionary. All names are provided without the root of
         the path intact, i.e. if you look for modules under
         `test` you will get `mod1`, `mod2`, etc.
-
-        :param path: The path to look under.
         """
-        finder = self.get_finder(path)
-        with path_context(finder.path):
+        with path_context(self.finder.path):
             cache = {}
-            for module in self.list_modules(finder):
-                module_path = '%s.%s' % (finder.module_root, module)
-                package = __import__(module_path, {}, {})
-                cache[module] = package
+            for module in self.search():
+                module_path = '%s.%s' % (self.finder.module_root, module)
+                cache[module] = import_module(module_path)
             return cache
 
-    def load(self, path, desired):
-        finder = self.get_finder(path)
-        with path_context(finder.path):
-            for module in self.list_modules(finder):
+    def load(self, desired):
+        with path_context(self.finder.path):
+            for module in self.search():
                 if module != desired:
                     continue
-                module = '%s.%s' % (finder.module_root, module)
-                return __import__(module, {}, {})
+                module = '%s.%s' % (self.finder.module_root, module)
+                return import_module(module)
         raise ImportError('Module %s not found' % (desired))
