@@ -45,11 +45,7 @@ class Finder(object):
     def is_package(self):
         return os.path.isdir(self.path)
 
-    def find_modules(self):
-        if not self.is_package:
-            yield self.root_module
-            return
-
+    def find_nested_modules(self):
         stream = traverse(self.path, hint_function=self.hint)
         stream = strip_path(stream, self.path)
         stream = filter_files(
@@ -60,3 +56,10 @@ class Finder(object):
         for item in stream:
             if not self.ignored(os.path.basename(item)):
                 yield item
+
+    def find_modules(self):
+        if not self.is_package:
+            yield self.root_module
+            return
+        for item in self.find_nested_modules():
+            yield item
