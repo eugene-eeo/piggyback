@@ -16,3 +16,7 @@ for module in importer.look('.'):
 cache = importer.import_all('.')
 module = cache['module.name']
 ```
+
+Let Piggyback manage all the hackery required for you and
+go write some code. No more manual `execfiles` and namespace
+management madness.
