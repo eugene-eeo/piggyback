@@ -12,9 +12,8 @@ def path_context(path):
         sys.path.remove(path)
 
 
-def path_to_module(path):
-    return path.rstrip('.py')\
-               .replace(os.path.sep, '.')
+def filename_to_module(path):
+    return path[:-3].replace(os.path.sep, '.')
 
 
 class Loader(object):
@@ -26,11 +25,15 @@ class Loader(object):
         return self.finder(path, **self.options)
 
     def list_modules(self, finder):
+        root = finder.root_module
+        is_package = finder.is_package
+
         for item in finder.find_modules():
-            children = path_to_module(item)
-            if finder.is_package:
-                children = '.'.join((finder.root_module, children))
-            yield children
+            child = filename_to_module(item)
+            if not is_package:
+                yield child
+                return
+            yield '%s.%s' % (root, child)
 
     def look(self, path):
         return self.list_modules(self.get_finder(path))
