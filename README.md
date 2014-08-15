@@ -20,10 +20,10 @@ from piggyback.finder import Finder
 from piggyback.lookup import Loader
 
 importer = Loader(Finder)
-for module in importer.look('.'):
+for module in importer.look('path/'):
     print(module)
 
-cache = importer.import_all('.')
+cache = importer.import_all('path/')
 module = cache['module.name']
 ```
 

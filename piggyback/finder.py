@@ -70,7 +70,7 @@ class Finder(object):
     def __init__(self, path, prefix='', suffix='.py'):
         self.path = os.path.dirname(path)
         self.root = os.path.abspath(path)
-        self.root_module = os.path.basename(path)
+        self.module_root = os.path.basename(path)
         self.prefix = prefix
         self.suffix = suffix
 
@@ -120,5 +120,5 @@ class Finder(object):
         a package.
         """
         if not self.is_package:
-            return [self.root_module]
+            return [self.module_root]
         return self.find_nested_modules()

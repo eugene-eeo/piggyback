@@ -26,6 +26,10 @@ def filename_to_module(path):
     return path[:-3].replace(os.path.sep, '.')
 
 
+def strip_root_module(module):
+    return module.split('.', 1)[1]
+
+
 class Loader(object):
     """
     Create a loader object with the given finder class and
@@ -56,7 +60,6 @@ class Loader(object):
 
         :param finder: A finder object.
         """
-        root = finder.root_module
         iterable = finder.find_modules()
         if not finder.is_package:
             yield next(iterable)
@@ -64,50 +67,45 @@ class Loader(object):
 
         for item in iterable:
             child = filename_to_module(item)
-            yield '%s.%s' % (root, child)
+            yield child
 
-    def look(self, path, trim=False):
+    def look(self, path):
         """
         Look for the modules found in a given path. Calls
         the `list_modules` method to determine the modules.
 
         :param path: The path to look for.
-        :param trim: Whether to trim the names of the
-            returned modules. See documentation for the
-            equivalent option in :meth:`Loader.import_all`.
         """
         finder = self.get_finder(path)
         iterable = self.list_modules(finder)
         for item in iterable:
-            if not trim:
-                yield item
-                continue
-            item = item.split('.', 1)[1]
             yield item
 
-    def import_all(self, path, trim=False):
+    def import_all(self, path):
         """
         Import all of the modules under the given path and
         stores them (according to their name) in a
-        dictionary. All names are provided with the root of
+        dictionary. All names are provided without the root of
         the path intact, i.e. if you look for modules under
-        `test` you will get `test.mod1`, `test.mod2`, etc.
+        `test` you will get `mod1`, `mod2`, etc.
 
         :param path: The path to look under.
-        :param trim: Whether to trim the names of paths,
-            i.e. instead of getting `test.mod1` you get
-            just the submodule name, `mod1`.
         """
         finder = self.get_finder(path)
         with path_context(finder.path):
             cache = {}
             for module in self.list_modules(finder):
-                package = __import__(module, {}, {})
+                module_path = '%s.%s' % (finder.module_root, module)
+                package = __import__(module_path, {}, {})
                 cache[module] = package
-            if trim:
-                results = {}
-                for key, value in cache:
-                    key = key.split('.', 1)[1]
-                    results[key] = value
-                return results
             return cache
+
+    def load(self, path, desired):
+        finder = self.get_finder(path)
+        with path_context(finder.path):
+            for module in self.list_modules(finder):
+                if module != desired:
+                    continue
+                module = '%s.%s' % (finder.module_root, module)
+                return __import__(module, {}, {})
+        raise ImportError('Module %s not found' % (desired))

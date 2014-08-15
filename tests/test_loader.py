@@ -10,16 +10,16 @@ class LoaderTest(unittest.TestCase):
 
     def test_look(self):
         found = list(self.loader.look(self.path))
-        assert found == ['examples.module', 'examples.nested.module']
-
-    def test_trim(self):
-        found = list(self.loader.look(self.path, trim=True))
         assert found == ['module', 'nested.module']
 
     def test_import_all(self):
         cache = self.loader.import_all(self.path)
-        for item in ('examples.module', 'examples.nested.module'):
+        for item in ('module', 'nested.module'):
             assert item in cache
 
         assert len(cache) == 2
-        assert cache['examples.module'].this
+        assert cache['module'].this
+
+    def test_load(self):
+        assert self.loader.load(self.path, 'module').this
+        assert self.loader.load(self.path, 'nested.module')
