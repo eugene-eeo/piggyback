@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Piggyback by eugene-eeo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Piggyback</h1>
+        <p>recursive module importer</p>
+
+        <p class="view"><a href="https://github.com/eugene-eeo/piggyback">View the Project on GitHub <small>eugene-eeo/piggyback</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/eugene-eeo/piggyback/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/eugene-eeo/piggyback/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/eugene-eeo/piggyback">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="piggyback" class="anchor" href="#piggyback"><span class="octicon octicon-link"></span></a>piggyback</h1>
+
+<p>Python package for finding modules recursively and then
+importing them. Useful for scripts/libraries which expose
+DSL-like stuff, like test suites and configuration.</p>
+
+<div class="highlight highlight-python"><pre><span class="kn">from</span> <span class="nn">piggyback.finder</span> <span class="kn">import</span> <span class="n">Finder</span>
+<span class="kn">from</span> <span class="nn">piggyback.lookup</span> <span class="kn">import</span> <span class="n">Loader</span>
+
+<span class="n">importer</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">Finder</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">importer</span><span class="o">.</span><span class="n">look</span><span class="p">(</span><span class="s">'.'</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
+<span class="n">cache</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">import_all</span><span class="p">(</span><span class="s">'.'</span><span class="p">)</span>
+<span class="n">module</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="s">'module.name'</span><span class="p">]</span>
+</pre></div>
+
+<p>Let Piggyback manage all the hackery required for you and
+go write some code. No more manual <code>execfiles</code> and namespace
+management madness.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/eugene-eeo">eugene-eeo</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
