@@ -26,13 +26,11 @@ class Loader(object):
         return self.finder(path, **self.options)
 
     def list_modules(self, finder):
-        root_module = finder.root_module
         for item in finder.find_modules():
             children = path_to_module(item)
-            if not finder.is_package:
-                yield children
-                continue
-            yield '.'.join((root_module, children))
+            if finder.is_package:
+                children = '.'.join((finder.root_module, children))
+            yield children
 
     def look(self, path):
         return self.list_modules(self.get_finder(path))
