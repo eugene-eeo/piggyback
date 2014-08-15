@@ -17,3 +17,11 @@ class FinderTest(unittest.TestCase):
         finder = Finder('tests/examples')
         assert finder.is_package
         assert list(finder.find_modules()) == ['module.py', 'nested/module.py']
+
+    def test_find_custom(self):
+        finder = Finder('tests/examples')
+        finder.ignored.append(lambda x: x == 'module.py')
+        assert not list(finder.find_modules())
+
+        finder.hints.append(lambda x: False)
+        assert not list(finder.find_modules())

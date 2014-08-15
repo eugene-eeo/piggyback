@@ -55,6 +55,10 @@ def filter_files(stream, prefix, suffix):
             yield path
 
 
+_default_hint = lambda x: '__init__.py' in x
+_default_ignore = lambda x: x.startswith('__')
+
+
 class Finder(object):
     """
     Create a finder object for the given path.
@@ -64,15 +68,16 @@ class Finder(object):
     :param suffix: Only load files with this suffix (can be
         combined with the prefix option).
     """
-    hints = [lambda x: '__init__.py' in x]
-    ignored = [lambda x: x.startswith('__')]
-
     def __init__(self, path, prefix='', suffix='.py'):
         self.path = os.path.dirname(path)
         self.root = os.path.abspath(path)
+
         self.module_root = os.path.basename(path)
         self.prefix = prefix
         self.suffix = suffix
+
+        self.hints = [_default_hint]
+        self.ignored = [_default_ignore]
 
     @property
     def is_package(self):
@@ -109,8 +114,9 @@ class Finder(object):
         )
         for item in stream:
             path = os.path.basename(item)
-            if not all(ignore(path) for ignore in self.ignored):
-                yield item
+            if any(ignore(path) for ignore in self.ignored):
+                continue
+            yield item
 
     def find_modules(self):
         """
