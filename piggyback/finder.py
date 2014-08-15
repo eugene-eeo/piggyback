@@ -27,14 +27,12 @@ def traverse(path, hint_function):
 
 def strip_path(stream, path):
     """
-    Strip the paths from the stream of paths of a
-    prefix.
+    Strip the paths from the stream of paths of a prefix.
 
     :param stream: The stream of paths.
-    :param path: The prefix common to all of the
-        paths (this fact wouldn't be checked by
-        the function). It needn't end with the
-        path separator.
+    :param path: The prefix common to all of the paths
+        (this fact wouldn't be checked by the function).
+        It needn't end with the path separator.
     """
     length = len(path)
     if not path.endswith(os.path.sep):
@@ -45,8 +43,8 @@ def strip_path(stream, path):
 
 def filter_files(stream, prefix, suffix):
     """
-    Filters the files based on whether they start
-    with a prefix or end with a suffix.
+    Filters the files based on whether they start with a
+    prefix or end with a suffix.
 
     :param stream: The stream of paths.
     :param prefix: The desired prefix.
@@ -62,11 +60,9 @@ class Finder(object):
     Create a finder object for the given path.
 
     :param path: The path.
-    :param prefix: Only load files that start
-        with this prefix.
-    :param suffix: Only load files that end with
-        this suffix (can be combined with the
-        prefix option).
+    :param prefix: Only load files with this prefix.
+    :param suffix: Only load files with this suffix (can be
+        combined with the prefix option).
     """
     hints = [lambda x: '__init__.py' in x]
     ignored = [lambda x: x.startswith('__')]
@@ -118,9 +114,10 @@ class Finder(object):
 
     def find_modules(self):
         """
-        Finds the modules under path of the finder object.
-        Returns either the root path or the found modules
-        depending on whether the finder object is a package.
+        Search for the modules under path of the finder
+        object. Returns either the root path or the found
+        modules depending on whether the finder object is
+        a package.
         """
         if not self.is_package:
             return [self.root_module]

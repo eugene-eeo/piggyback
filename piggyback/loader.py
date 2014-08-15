@@ -6,10 +6,9 @@ from contextlib import contextmanager
 @contextmanager
 def path_context(path):
     """
-    A context manager that allows you to enter
-    a given path into sys.path and then safely
-    guarantee that the path was removed from
-    sys.path once the block exits.
+    A context manager that allows you to enter a given path
+    into sys.path and then safely guarantee that the path
+    was removed from sys.path once the block exits.
     """
     sys.path.append(path)
     try:
@@ -20,21 +19,21 @@ def path_context(path):
 
 def filename_to_module(path):
     """
-    Convert a filename to a module. Replaces
-    the path separators with dots and then
-    removes the '.py' in the end.
+    Convert a filename to a module. Replaces the path
+    separators with dots and then removes the '.py' in the
+    end.
     """
     return path[:-3].replace(os.path.sep, '.')
 
 
 class Loader(object):
     """
-    Create a loader object with the given finder
-    class and options.
+    Create a loader object with the given finder class and
+    options.
 
     :param finder: The Finder class.
-    :parma option: Options to provide for the finder
-        class when it is requested.
+    :parma option: Options to provide for the finder class
+        when it is requested.
     """
     def __init__(self, finder, **options):
         self.finder = finder
@@ -42,9 +41,9 @@ class Loader(object):
 
     def get_finder(self, path):
         """
-        Get a finder object for a given path. Takes
-        the options that this loader object was
-        instantiated with into account.
+        Get a finder object for a given path. Takes the
+        options that this loader object was instantiated
+        with into account.
 
         :param path: The path.
         """
@@ -52,8 +51,8 @@ class Loader(object):
 
     def list_modules(self, finder):
         """
-        List the modules found by a given finder.
-        Does not actually import anything.
+        List the modules found by a given finder. Does not
+        actually import anything.
 
         :param finder: A finder object.
         """
@@ -69,13 +68,13 @@ class Loader(object):
 
     def look(self, path, trim=False):
         """
-        Look for the modules found in a given
-        path. Calls the `list_modules` method
-        to determine the modules.
+        Look for the modules found in a given path. Calls
+        the `list_modules` method to determine the modules.
 
         :param path: The path to look for.
-        :param trim: Whether to trim the names
-            of the returned modules.
+        :param trim: Whether to trim the names of the
+            returned modules. See documentation for the
+            equivalent option in :meth:`Loader.import_all`.
         """
         finder = self.get_finder(path)
         iterable = self.list_modules(finder)
@@ -88,17 +87,16 @@ class Loader(object):
 
     def import_all(self, path, trim=False):
         """
-        Import all of the modules under the given
-        path and stores them (according to their
-        name) in a dictionary. All names are provided
-        with the root of the path intact, i.e. if
-        you look for modules under `test` you will
-        get `test.mod1`, `test.mod2`, etc.
+        Import all of the modules under the given path and
+        stores them (according to their name) in a
+        dictionary. All names are provided with the root of
+        the path intact, i.e. if you look for modules under
+        `test` you will get `test.mod1`, `test.mod2`, etc.
 
         :param path: The path to look under.
-        :param trim: Whether to trim the names
-            of paths, i.e. instead of getting
-            `test.mod1` you get `mod1`.
+        :param trim: Whether to trim the names of paths,
+            i.e. instead of getting `test.mod1` you get
+            just the submodule name, `mod1`.
         """
         finder = self.get_finder(path)
         with path_context(finder.path):
