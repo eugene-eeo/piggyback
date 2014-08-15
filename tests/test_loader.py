@@ -8,8 +8,8 @@ class LoaderTest(unittest.TestCase):
         self.loader = Loader(Finder('tests/examples'))
 
     def test_look(self):
-        found = list(self.loader.search())
-        assert found == ['module', 'nested.module']
+        found = set(self.loader.search())
+        assert found == set(('module', 'nested.module'))
 
     def test_import_all(self):
         cache = self.loader.import_all()
