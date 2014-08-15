@@ -25,8 +25,7 @@ class Loader(object):
     def get_finder(self, path):
         return self.finder(path, **self.options)
 
-    def look(self, path):
-        finder = self.finder(path, **self.options)
+    def list_modules(self, finder):
         root_module = finder.root_module
         for item in finder.find_modules():
             children = path_to_module(item)
@@ -35,10 +34,14 @@ class Loader(object):
                 continue
             yield '.'.join((root_module, children))
 
+    def look(self, path):
+        return self.list_modules(self.get_finder(path))
+
     def import_all(self, path):
-        with path_context(self.get_finder(path).path):
+        finder = self.get_finder(path)
+        with path_context(finder.path):
             cache = {}
-            for module in self.look(path):
+            for module in self.list_modules(finder):
                 package = __import__(module, {}, {})
                 cache[module] = package
             return cache
