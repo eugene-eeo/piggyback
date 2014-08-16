@@ -45,7 +45,9 @@ right, namely:
   the importing.
 
 To install the current version of the package, simply do a
-``pip install piggyback``
+``pip install piggyback``. For the documentation you can
+simply visit the `docs`_ on GitHub.
 
+.. _docs: https://github.com/eugene-eeo/piggyback/blob/master/docs/index.rst
 .. image:: https://travis-ci.org/eugene-eeo/piggyback.svg?branch=master
     :target: https://travis-ci.org/eugene-eeo/piggyback
