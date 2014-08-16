@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import piggyback
 from distutils.core import setup
-from setuptools import find_packages
 
 setup(
     name='Piggyback',
@@ -11,4 +10,5 @@ setup(
     author_email='packwolf58@gmail.com',
     url='https://github.com/eugene-eeo/piggyback',
     packages=['piggyback'],
+    long_description=open('README.rst').read(),
 )
