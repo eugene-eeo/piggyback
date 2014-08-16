@@ -35,9 +35,9 @@ go write some code. No more manual ``execfiles`` and namespace
 management madness. Piggyback does importing and namespaces
 right, namely:
 
-- We isolate every ``__import__``ed module, and their namespaces
-  are separate of one another, as well as the current module.
-  No namespace clashes.
+- We isolate every module that we ``__import__``, and their
+  namespaces are separate of one another, as well as the
+  current module. No namespace clashes.
 
 - The ``sys.path`` variable remains unchanged at the end of
   the importing- Piggyback will ensure that the `sys.path`
