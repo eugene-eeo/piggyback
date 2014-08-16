@@ -24,7 +24,7 @@ def traverse(path, hint):
             yield filepath
 
 
-def strip_prefix(stream, prefix):
+def normalize_paths(stream, prefix):
     """
     Strip the paths from the stream of paths of a prefix.
 
@@ -98,7 +98,7 @@ class Finder(object):
         `is_package` property).
         """
         stream = traverse(self.root, hint=self.hint_function)
-        stream = strip_prefix(stream, prefix=self.root)
+        stream = normalize_paths(stream, prefix=self.root)
         stream = filter_files(
             stream,
             prefix=self.prefix,
