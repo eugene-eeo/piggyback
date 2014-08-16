@@ -45,8 +45,58 @@ them to the loader. To create a loader::
     from piggyback.finder import Finder
     from piggyback.loader import Loader
 
-    loader = Loader(Finder('/path/'))
+    loader = Loader(Finder('path'))
 
 Then when you want to load modules, you can simply call
 the load function. For example if you want to load the
-module named
+module named examples that is a submodule of the module
+that the Finder object was created with, you should do::
+
+    loader.load('path.examples')
+
+Alternatively you can discover all modules by calling
+the ``import_all`` function::
+
+    modules = loader.import_all()
+    modules['path.examples']
+
+Note that if you use a path to a script (file) when creating
+the Finder object, Piggyback will also handle that correctly
+and import the file only. Also, all files starting with
+double underscores will not be imported, i.e. to prevent some
+side effects when ``__main__`` is called. To find out if the
+path points to a script or package, you have two options::
+
+    is_package = loader.root is not None
+    is_package = loader.finder.is_package
+
+API
+---
+
+.. autoclass:: piggyback.loader.Loader
+    :members:
+
+.. autoclass:: piggyback.finder.Finder
+    :members:
+
+
+Advanced Usage
+--------------
+
+You can easily customize the finder object so that it
+loads only certain types of files, for example if you
+want it to load only files that start with ``test_``,
+you can do::
+
+    finder.prefix = 'test_'
+
+Alternatively you can also ignore files that fit certain
+conditions, for example::
+
+    finder.ignored.append(lambda x: not x.startswith('test_'))
+
+Also, you can also configure the finder to only traverse
+directories that contain certain files/do not contain
+certain files with the ``hints`` attribute::
+
+    finder.hints.append(lambda files: '.notests' not in files)

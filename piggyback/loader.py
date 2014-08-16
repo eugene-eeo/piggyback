@@ -54,11 +54,18 @@ class Loader(object):
     options.
 
     :param finder: The Finder class.
-    :parma option: Options to provide for the finder class
-        when it is requested.
     """
     def __init__(self, finder):
         self.finder = finder
+
+    @property
+    def root(self):
+        """
+        Returns the module root if the finder object points
+        to a directory, else returns None.
+        """
+        if self.finder.is_package:
+            return self.finder.module_root
 
     def search(self):
         """
@@ -66,11 +73,10 @@ class Loader(object):
         actually import anything.
         """
         iterable = iter(self.finder.find_modules())
-        is_package = self.finder.is_package
-        root = self.finder.module_root
+        root = self.root
         for item in iterable:
             item = to_module(item)
-            if not is_package:
+            if not root:
                 yield item
                 return
             yield '%s.%s' % (root, item)
