@@ -109,8 +109,8 @@ class Finder(object):
         stream = strip_prefix(stream, prefix=self.root)
         stream = filter_files(
             stream,
-            self.prefix,
-            self.suffix
+            prefix=self.prefix,
+            suffix=self.suffix
         )
         for item in stream:
             path = os.path.basename(item)

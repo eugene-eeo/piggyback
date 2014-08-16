@@ -31,23 +31,21 @@ def to_module(path):
     return path[:-3].replace(os.path.sep, '.')
 
 
-def import_module(root, package):
+def import_module(module):
     """
     Import a module and then return the module object itself.
     Note that this function does some ``getattr`` behind the
     scenes in order to fetch the "real" module, and not the
     root module.
 
-    :param root: The root module.
-    :param package: The module to import.
+    :param module: The module to import.
     """
-    module_name = '%s.%s' % (root, package)
-    module = __import__(module_name, {}, {})
-    for item in package.split('.'):
-        module = getattr(module, item, None)
-        if not isinstance(module, ModuleType):
+    lib = __import__(module, {}, {})
+    for item in module.split('.')[1:]:
+        lib = getattr(lib, item, None)
+        if not isinstance(lib, ModuleType):
             raise ImportError("No module named '%s'" % (item))
-    return module
+    return lib
 
 
 class Loader(object):
@@ -68,8 +66,14 @@ class Loader(object):
         actually import anything.
         """
         iterable = iter(self.finder.find_modules())
+        is_package = self.finder.is_package
+        root = self.finder.module_root
         for item in iterable:
-            yield to_module(item)
+            item = to_module(item)
+            if not is_package:
+                yield item
+                return
+            yield '%s.%s' % (root, item)
 
     def import_all(self):
         """
@@ -79,11 +83,10 @@ class Loader(object):
         the path intact, i.e. if you look for modules under
         `test` you will get `mod1`, `mod2`, etc.
         """
-        root = self.finder.module_root
         with path_context(self.finder.path):
             cache = {}
             for module in self.search():
-                cache[module] = import_module(root, module)
+                cache[module] = import_module(module)
             return cache
 
     def load(self, module):
@@ -92,8 +95,7 @@ class Loader(object):
         return the module object. You will raise an
         ``ImportError`` if the module is not found.
 
-        :param desired: The desired module.
+        :param module: The desired module.
         """
-        root = self.finder.module_root
         with path_context(self.finder.path):
-            return import_module(root, module)
+            return import_module(module)

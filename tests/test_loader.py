@@ -9,16 +9,16 @@ class LoaderTest(unittest.TestCase):
 
     def test_look(self):
         found = set(self.loader.search())
-        assert found == set(('module', 'nested.module'))
+        assert found == set(('examples.module', 'examples.nested.module'))
 
     def test_import_all(self):
         cache = self.loader.import_all()
-        for item in ('module', 'nested.module'):
+        for item in ('examples.module', 'examples.nested.module'):
             assert item in cache
 
         assert len(cache) == 2
-        assert cache['module'].this
+        assert cache['examples.module'].__name__ == 'examples.module'
 
     def test_load(self):
-        assert self.loader.load('module').this
-        assert self.loader.load('nested.module')
+        assert self.loader.load('examples.module').this
+        assert self.loader.load('examples.nested.module')
