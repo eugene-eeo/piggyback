@@ -49,5 +49,9 @@ To install the current version of the package, simply do a
 simply visit the `docs`_ on Github pages.
 
 .. _docs: https://eugene-eeo.github.io/piggyback
+
 .. image:: https://travis-ci.org/eugene-eeo/piggyback.svg?branch=master
     :target: https://travis-ci.org/eugene-eeo/piggyback
+
+.. image:: http://img.shields.io/pypi/v/Piggyback.svg
+    :target: https://pypi.python.org/pypi/Piggyback
