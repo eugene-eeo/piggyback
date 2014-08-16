@@ -32,16 +32,16 @@ class FinderTest(unittest.TestCase):
 
 class FinderFuncTest(unittest.TestCase):
     def test_traverse(self):
-        def hinter(files):
+        def hint(files):
             return '__init__.py' in files
 
-        given = traverse('tests/examples', hinter)
+        given = traverse('tests/examples', hint)
         given = (i for i in given if i.endswith('.py'))
         expected = [
             'tests/examples/__init__.py',
             'tests/examples/module.py',
             'tests/examples/nested/__init__.py',
-            'tests/examples/nested/module.py'
+            'tests/examples/nested/module.py',
         ]
         assert set(given) == set(expected)
 

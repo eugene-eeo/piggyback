@@ -48,6 +48,6 @@ To install the current version of the package, simply do a
 ``pip install piggyback``. For the documentation you can
 simply visit the `docs`_ on Github pages.
 
-.. _docs: https://github.com/eugene-eeo/piggyback
+.. _docs: https://eugene-eeo.github.io/piggyback
 .. image:: https://travis-ci.org/eugene-eeo/piggyback.svg?branch=master
     :target: https://travis-ci.org/eugene-eeo/piggyback
