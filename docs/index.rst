@@ -86,17 +86,26 @@ Advanced Usage
 You can easily customize the finder object so that it
 loads only certain types of files, for example if you
 want it to load only files that start with ``test_``,
-you can do::
+you can configure it using the prefix attribute::
 
     finder.prefix = 'test_'
 
-Alternatively you can also ignore files that fit certain
-conditions, for example::
+Alternatively (and a better method) is using a function
+that will check if the filename doesn't start with ``test_``,
+by appending a function into the ``ignored`` attribute.
+What this means is that all files that *do not* start with
+``test_`` are ignored. Every function that is within the
+``ignored`` list will be passed the filename of every
+traversed Python module::
 
     finder.ignored.append(lambda x: not x.startswith('test_'))
 
 Also, you can also configure the finder to only traverse
 directories that contain certain files/do not contain
-certain files with the ``hints`` attribute::
+certain files with the ``hints`` attribute. How this works
+is that each traversed directory will be called with each
+function in the ``hints`` attribute, and it will only be
+yielded/taken into account if all the ``hints`` return
+``True``::
 
     finder.hints.append(lambda files: '.notests' not in files)
