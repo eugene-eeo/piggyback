@@ -68,10 +68,6 @@ class Loader(object):
         actually import anything.
         """
         iterable = iter(self.finder.find_modules())
-        if not self.finder.is_package:
-            yield to_module(next(iterable))
-            return
-
         for item in iterable:
             yield to_module(item)
 
@@ -90,13 +86,14 @@ class Loader(object):
                 cache[module] = import_module(root, module)
             return cache
 
-    def load(self, desired):
+    def load(self, module):
         """
-        Load a *desired* module from the search path, and
+        Load a desired *module* from the search path, and
         return the module object. You will raise an
         ``ImportError`` if the module is not found.
 
         :param desired: The desired module.
         """
+        root = self.finder.module_root
         with path_context(self.finder.path):
-            return import_module(self.finder.module_root, desired)
+            return import_module(root, module)

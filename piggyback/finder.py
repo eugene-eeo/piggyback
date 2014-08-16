@@ -34,8 +34,8 @@ def strip_prefix(stream, prefix):
         (this fact wouldn't be checked by the function).
         It needn't end with the path separator.
     """
-    length = len(path)
-    if not path.endswith(os.path.sep):
+    length = len(prefix)
+    if not prefix.endswith(os.path.sep):
         length += len(os.path.sep)
     for filename in stream:
         yield filename[length:]
