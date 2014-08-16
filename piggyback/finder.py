@@ -1,7 +1,7 @@
 import os
 
 
-def traverse(path, hint_function):
+def traverse(path, hint):
     """
     Traverse the directory (depth-first) recursively, and
     yields all of the files of the directory.
@@ -12,14 +12,14 @@ def traverse(path, hint_function):
         with the contents of each directory.
     """
     files = os.listdir(path)
-    if not hint_function(files):
+    if not hint(files):
         return
     for item in files:
         if item.startswith('.'):
             continue
         filepath = os.path.join(path, item)
         if os.path.isdir(filepath):
-            for item in traverse(filepath, hint_function):
+            for item in traverse(filepath, hint):
                 yield item
             continue
         yield filepath
@@ -98,7 +98,7 @@ class Finder(object):
         the finder object is a package (dictated by the
         `is_package` property).
         """
-        stream = traverse(self.root, hint_function=self.hint_function)
+        stream = traverse(self.root, hint=self.hint_function)
         stream = strip_prefix(stream, prefix=self.root)
         stream = filter_files(
             stream,
