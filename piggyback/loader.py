@@ -79,9 +79,9 @@ class Loader(object):
         """
         Import all of the modules under the given path and
         stores them (according to their name) in a
-        dictionary. All names are provided without the root of
+        dictionary. All names are provided with the root of
         the path intact, i.e. if you look for modules under
-        `test` you will get `mod1`, `mod2`, etc.
+        `test` you will get `test.mod1`, `test.mod2`, etc.
         """
         with path_context(self.finder.path):
             cache = {}
