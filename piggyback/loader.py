@@ -10,6 +10,8 @@ def path_context(path):
     A context manager that allows you to enter a given path
     into sys.path and then safely guarantee that the path
     was removed from sys.path once the block exits.
+
+    :param path: The path to insert into sys.path.
     """
     sys.path.insert(1, path)
     try:
@@ -18,11 +20,13 @@ def path_context(path):
         sys.path.remove(path)
 
 
-def filename_to_module(path):
+def to_module(path):
     """
     Convert a filename to a module. Replaces the path
     separators with dots and then removes the '.py' in the
     end.
+
+    :param path: The path to the module.
     """
     return path[:-3].replace(os.path.sep, '.')
 
@@ -34,6 +38,7 @@ def import_module(root, package):
     scenes in order to fetch the "real" module, and not the
     root module.
 
+    :param root: The root module.
     :param package: The module to import.
     """
     module_name = '%s.%s' % (root, package)
@@ -62,14 +67,13 @@ class Loader(object):
         List the modules found by a given finder. Does not
         actually import anything.
         """
-        iterable = self.finder.find_modules()
+        iterable = iter(self.finder.find_modules())
         if not self.finder.is_package:
-            yield next(iterable)
+            yield to_module(next(iterable))
             return
 
         for item in iterable:
-            child = filename_to_module(item)
-            yield child
+            yield to_module(item)
 
     def import_all(self):
         """
@@ -89,7 +93,8 @@ class Loader(object):
     def load(self, desired):
         """
         Load a *desired* module from the search path, and
-        return the module object.
+        return the module object. You will raise an
+        ``ImportError`` if the module is not found.
 
         :param desired: The desired module.
         """

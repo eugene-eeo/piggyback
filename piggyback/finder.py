@@ -25,12 +25,12 @@ def traverse(path, hint_function):
         yield filepath
 
 
-def strip_path(stream, path):
+def strip_prefix(stream, prefix):
     """
     Strip the paths from the stream of paths of a prefix.
 
     :param stream: The stream of paths.
-    :param path: The prefix common to all of the paths
+    :param prefix: The prefix common to all of the paths
         (this fact wouldn't be checked by the function).
         It needn't end with the path separator.
     """
@@ -106,7 +106,7 @@ class Finder(object):
         `is_package` property).
         """
         stream = traverse(self.root, hint_function=self.hint_function)
-        stream = strip_path(stream, self.root)
+        stream = strip_prefix(stream, prefix=self.root)
         stream = filter_files(
             stream,
             self.prefix,
