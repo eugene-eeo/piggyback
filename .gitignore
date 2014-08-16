@@ -1,3 +1,6 @@
+# Created by the setup.py command
+MANIFEST
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
