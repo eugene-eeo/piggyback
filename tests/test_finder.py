@@ -36,6 +36,7 @@ class FinderFuncTest(unittest.TestCase):
             return '__init__.py' in files
 
         given = traverse('tests/examples', hinter)
+        given = (i for i in given if i.endswith('.py'))
         expected = [
             'tests/examples/__init__.py',
             'tests/examples/module.py',
