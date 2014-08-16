@@ -46,8 +46,8 @@ right, namely:
 
 To install the current version of the package, simply do a
 ``pip install piggyback``. For the documentation you can
-simply visit the `docs`_ on GitHub.
+simply visit the `docs`_ on Github pages.
 
-.. _docs: https://github.com/eugene-eeo/piggyback/blob/master/docs/index.rst
+.. _docs: https://github.com/eugene-eeo/piggyback
 .. image:: https://travis-ci.org/eugene-eeo/piggyback.svg?branch=master
     :target: https://travis-ci.org/eugene-eeo/piggyback
