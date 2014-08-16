@@ -28,7 +28,7 @@ goals.
         print(module)
 
     cache = importer.import_all()
-    module = cache['module.name']
+    module = cache['path.module']
 
 Let Piggyback manage all the hackery required for you and
 go write some code. No more manual ``execfiles`` and namespace
