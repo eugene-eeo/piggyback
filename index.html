@@ -1,81 +1,290 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Piggyback by eugene-eeo</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Piggyback &mdash; Piggyback 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Piggyback 0.1 documentation" href="#" /> 
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Piggyback</h1>
-        <p>recursive module importer</p>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Piggyback 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
 
-        <p class="view"><a href="https://github.com/eugene-eeo/piggyback">View the Project on GitHub <small>eugene-eeo/piggyback</small></a></p>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="piggyback">
+<h1>Piggyback<a class="headerlink" href="#piggyback" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-s-piggyback">
+<h2>What&#8217;s Piggyback?<a class="headerlink" href="#what-s-piggyback" title="Permalink to this headline">¶</a></h2>
+<p>Piggyback is a tiny module which allows you to properly
+import other modules easily, and in an extensible manner.
+The design of Piggyback is inherently simple enough, so
+anyone unfamiliar with the codebase can read and understand
+the code. This project aims to be used in other codebases
+where they need to import modules/plugins:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">piggyback.finder</span> <span class="kn">import</span> <span class="n">Finder</span>
+<span class="kn">from</span> <span class="nn">piggyback.loader</span> <span class="kn">import</span> <span class="n">Loader</span>
 
-
-        <ul>
-          <li><a href="https://github.com/eugene-eeo/piggyback/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/eugene-eeo/piggyback/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/eugene-eeo/piggyback">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <pre><code>Python  _                     _             _
-   _ __(_)__ _ __ _ _  _ _  _| |__  __ _ __| |__
-  | '_ \ / _` / _` | || | || | '_ \/ _` / _| / /
-  | .__/_\__, \__, |\_, |\_, |_.__/\__,_\__|_\_\
-  |_|    |___/|___/ |__/ |__/
-</code></pre>
-
-<p>Python package for finding modules recursively and then
-importing them. Useful for scripts/libraries which expose
-DSL-like stuff, like test suites and configuration.</p>
-
-<p>Development goals include extensibility and stability. We
-aim for a robust API that although doesn't do much does what
-it does well. Currently we think that we've reached those
-goals.</p>
-
-<div class="highlight highlight-python"><pre><span class="kn">from</span> <span class="nn">piggyback.finder</span> <span class="kn">import</span> <span class="n">Finder</span>
-<span class="kn">from</span> <span class="nn">piggyback.lookup</span> <span class="kn">import</span> <span class="n">Loader</span>
-
-<span class="n">importer</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">Finder</span><span class="p">(</span><span class="s">'path'</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">importer</span><span class="o">.</span><span class="n">search</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
-
-<span class="n">cache</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">import_all</span><span class="p">()</span>
-<span class="n">module</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="s">'path.module'</span><span class="p">]</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">Finder</span><span class="p">(</span><span class="s">&#39;path/to/modules&#39;</span><span class="p">))</span>
+<span class="n">modules</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">import_all</span><span class="p">()</span>
+<span class="n">modules</span><span class="p">[</span><span class="s">&#39;module&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="p">()</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
+<p>The package is available on <a class="reference external" href="https://pypi.python.org/pypi/Piggyback">PyPI</a>. To install it, use
+either <tt class="docutils literal"><span class="pre">pip</span></tt> or <tt class="docutils literal"><span class="pre">easy_install</span></tt>:</p>
+<div class="highlight-python"><pre>$ pip install Piggyback</pre>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>To load modules, you first have to create a <tt class="docutils literal"><span class="pre">Loader</span></tt> and
+<tt class="docutils literal"><span class="pre">Finder</span></tt> object. The task of the <tt class="docutils literal"><span class="pre">Loader</span></tt> object is
+simply to load the modules (import them), while the task
+of the <tt class="docutils literal"><span class="pre">Finder</span></tt> object is to find the modules, and pass
+them to the loader. To create a loader:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">piggyback.finder</span> <span class="kn">import</span> <span class="n">Finder</span>
+<span class="kn">from</span> <span class="nn">piggyback.loader</span> <span class="kn">import</span> <span class="n">Loader</span>
 
-<p>Let Piggyback manage all the hackery required for you and
-go write some code. No more manual <code>execfiles</code> and namespace
-management madness. Piggyback does importing and namespaces
-right, namely:</p>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">Finder</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Then when you want to load modules, you can simply call
+the load function. For example if you want to load the
+module named examples that is a submodule of the module
+that the Finder object was created with, you should do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;path.examples&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively you can discover all modules by calling
+the <tt class="docutils literal"><span class="pre">import_all</span></tt> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">modules</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">import_all</span><span class="p">()</span>
+<span class="n">modules</span><span class="p">[</span><span class="s">&#39;path.examples&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that if you use a path to a script (file) when creating
+the Finder object, Piggyback will also handle that correctly
+and import the file only. Also, all files starting with
+double underscores will not be imported, i.e. to prevent some
+side effects when <tt class="docutils literal"><span class="pre">__main__</span></tt> is called. To find out if the
+path points to a script or package, you have two options:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">is_package</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+<span class="n">is_package</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">is_package</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="piggyback.loader.Loader">
+<em class="property">class </em><tt class="descclassname">piggyback.loader.</tt><tt class="descname">Loader</tt><big>(</big><em>finder</em><big>)</big><a class="headerlink" href="#piggyback.loader.Loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a loader object with the given finder class and
+options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>finder</strong> &#8211; The Finder class.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="piggyback.loader.Loader.import_all">
+<tt class="descname">import_all</tt><big>(</big><big>)</big><a class="headerlink" href="#piggyback.loader.Loader.import_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import all of the modules under the given path and
+stores them (according to their name) in a
+dictionary. All names are provided with the root of
+the path intact, i.e. if you look for modules under
+<cite>test</cite> you will get <cite>test.mod1</cite>, <cite>test.mod2</cite>, etc.</p>
+</dd></dl>
 
-<ul>
-<li><p>We isolate every <code>__import__</code>ed module, and their namespaces
-are separate of one another, as well as the current module.
-No namespace clashes.</p></li>
-<li><p>The <code>sys.path</code> variable remains unchanged at the end of the
-importing- Piggyback will ensure that the <code>sys.path</code> is
-cleansed of all appended paths once we are finished with
-the importing.</p></li>
+<dl class="method">
+<dt id="piggyback.loader.Loader.load">
+<tt class="descname">load</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#piggyback.loader.Loader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a desired <em>module</em> from the search path, and
+return the module object. You will raise an
+<tt class="docutils literal"><span class="pre">ImportError</span></tt> if the module is not found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module</strong> &#8211; The desired module.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="piggyback.loader.Loader.search">
+<tt class="descname">search</tt><big>(</big><big>)</big><a class="headerlink" href="#piggyback.loader.Loader.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the modules found by a given finder. Does not
+actually import anything.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="piggyback.finder.Finder">
+<em class="property">class </em><tt class="descclassname">piggyback.finder.</tt><tt class="descname">Finder</tt><big>(</big><em>path</em>, <em>prefix=''</em>, <em>suffix='.py'</em><big>)</big><a class="headerlink" href="#piggyback.finder.Finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a finder object for the given path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> &#8211; The path.</li>
+<li><strong>prefix</strong> &#8211; Only load files with this prefix.</li>
+<li><strong>suffix</strong> &#8211; Only load files with this suffix (can be
+combined with the prefix option).</li>
 </ul>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/eugene-eeo">eugene-eeo</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="piggyback.finder.Finder.find_modules">
+<tt class="descname">find_modules</tt><big>(</big><big>)</big><a class="headerlink" href="#piggyback.finder.Finder.find_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for the modules under path of the finder
+object. Returns either the root path or the found
+modules depending on whether the finder object is
+a package.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="piggyback.finder.Finder.find_nested_modules">
+<tt class="descname">find_nested_modules</tt><big>(</big><big>)</big><a class="headerlink" href="#piggyback.finder.Finder.find_nested_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for nested modules. To be called only when
+the finder object is a package (dictated by the
+<cite>is_package</cite> property).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="piggyback.finder.Finder.hint_function">
+<tt class="descname">hint_function</tt><a class="headerlink" href="#piggyback.finder.Finder.hint_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the hint function for the finder object.
+The hint function basically checks if the path
+conforms to all of the hints in the <cite>hints</cite>
+attribute.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="advanced-usage">
+<h2>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>
+<p>You can easily customize the finder object so that it
+loads only certain types of files, for example if you
+want it to load only files that start with <tt class="docutils literal"><span class="pre">test_</span></tt>,
+you can configure it using the prefix attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">finder</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;test_&#39;</span>
+</pre></div>
+</div>
+<p>Alternatively (and a better method) is using a function
+that will check if the filename doesn&#8217;t start with <tt class="docutils literal"><span class="pre">test_</span></tt>,
+by appending a function into the <tt class="docutils literal"><span class="pre">ignored</span></tt> attribute.
+What this means is that all files that <em>do not</em> start with
+<tt class="docutils literal"><span class="pre">test_</span></tt> are ignored. Every function that is within the
+<tt class="docutils literal"><span class="pre">ignored</span></tt> list will be passed the filename of every
+traversed Python module:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">finder</span><span class="o">.</span><span class="n">ignored</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;test_&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Also, you can also configure the finder to only traverse
+directories that contain certain files/do not contain
+certain files with the <tt class="docutils literal"><span class="pre">hints</span></tt> attribute. How this works
+is that each traversed directory will be called with each
+function in the <tt class="docutils literal"><span class="pre">hints</span></tt> attribute, and it will only be
+yielded/taken into account if all the <tt class="docutils literal"><span class="pre">hints</span></tt> return
+<tt class="docutils literal"><span class="pre">True</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">finder</span><span class="o">.</span><span class="n">hints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">lambda</span> <span class="n">files</span><span class="p">:</span> <span class="s">&#39;.notests&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Piggyback</a><ul>
+<li><a class="reference internal" href="#what-s-piggyback">What&#8217;s Piggyback?</a></li>
+<li><a class="reference internal" href="#installing">Installing</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#advanced-usage">Advanced Usage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Piggyback 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Eugene Eeo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
   </body>
 </html>
