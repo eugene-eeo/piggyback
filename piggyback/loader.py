@@ -57,29 +57,22 @@ class Loader(object):
     """
     def __init__(self, finder):
         self.finder = finder
-
-    @property
-    def root(self):
-        """
-        Returns the module root if the finder object points
-        to a directory, else returns None.
-        """
-        if self.finder.is_package:
-            return self.finder.module_root
+        self.root = self.finder.module_root
+        if not self.finder.is_package:
+            self.root = None
 
     def search(self):
         """
         List the modules found by a given finder. Does not
         actually import anything.
         """
-        iterable = iter(self.finder.find_modules())
-        root = self.root
-        for item in iterable:
+        root_package = self.root
+        for item in self.finder.find_modules():
             item = to_module(item)
-            if not root:
+            if not root_package:
                 yield item
                 return
-            yield '%s.%s' % (root, item)
+            yield '%s.%s' % (root_package, item)
 
     def import_all(self):
         """

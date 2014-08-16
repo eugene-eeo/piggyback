@@ -73,19 +73,12 @@ class Finder(object):
         self.root = os.path.abspath(path)
 
         self.module_root = os.path.basename(path)
+        self.is_package = os.path.isdir(self.root)
         self.prefix = prefix
         self.suffix = suffix
 
         self.hints = [_default_hint]
         self.ignored = [_default_ignore]
-
-    @property
-    def is_package(self):
-        """
-        Returns a value telling if the path under the
-        finder object is a package.
-        """
-        return os.path.isdir(self.root)
 
     @property
     def hint_function(self):
