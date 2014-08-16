@@ -50,7 +50,8 @@ def filter_files(stream, prefix, suffix):
     :param suffix: The desired suffix.
     """
     for path in stream:
-        if path.startswith(prefix) and path.endswith(suffix):
+        base = os.path.basename(path)
+        if base.startswith(prefix) and base.endswith(suffix):
             yield path
 
 
