@@ -15,14 +15,13 @@ def traverse(path, hint):
     if not hint(files):
         return
     for item in files:
-        if item.startswith('.'):
-            continue
-        filepath = os.path.join(path, item)
-        if os.path.isdir(filepath):
-            for item in traverse(filepath, hint):
-                yield item
-            continue
-        yield filepath
+        if not item.startswith('.'):
+            filepath = os.path.join(path, item)
+            if os.path.isdir(filepath):
+                for item in traverse(filepath, hint):
+                    yield item
+                continue
+            yield filepath
 
 
 def strip_prefix(stream, prefix):
