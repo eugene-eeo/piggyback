@@ -85,6 +85,12 @@ class Finder(object):
 
     @property
     def ignore_function(self):
+        """
+        Returns an ignore function for the finder object.
+        The ignore function checks if any of the functions
+        in the ``ignored`` attribute return True for a
+        given object.
+        """
         def ignore(path):
             return any(f(path) for f in self.ignored)
         return ignore
