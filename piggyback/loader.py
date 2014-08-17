@@ -33,10 +33,10 @@ def to_module(path):
 
 def import_module(module):
     """
-    Import a module and then return the module object itself.
-    Note that this function does some ``getattr`` behind the
-    scenes in order to fetch the "real" module, and not the
-    root module.
+    Import a module and then return the module object
+    itself. Note that this function does some ``getattr``
+    behind the scenes in order to fetch the "real" module,
+    and not the root module.
 
     :param module: The module to import.
     """
