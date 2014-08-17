@@ -40,7 +40,7 @@ def normalize_paths(stream, prefix):
         yield filename[length:]
 
 
-def filter_files(stream, prefix, suffix):
+def filter_files(stream, prefix, suffix, ignore):
     """
     Filters the files based on whether they start with a
     prefix or end with a suffix.
@@ -48,11 +48,14 @@ def filter_files(stream, prefix, suffix):
     :param stream: The stream of paths.
     :param prefix: The desired prefix.
     :param suffix: The desired suffix.
+    :param ignore: An ignore function- files will only
+        be yielded if the function doesn't return True.
     """
     for path in stream:
         base = os.path.basename(path)
         if base.startswith(prefix) and base.endswith(suffix):
-            yield path
+            if not ignore(base):
+                yield path
 
 
 _default_hint = lambda x: '__init__.py' in x
@@ -81,6 +84,12 @@ class Finder(object):
         self.ignored = [_default_ignore]
 
     @property
+    def ignore_function(self):
+        def ignore(path):
+            return any(f(path) for f in self.ignored)
+        return ignore
+
+    @property
     def hint_function(self):
         """
         Returns the hint function for the finder object.
@@ -100,16 +109,12 @@ class Finder(object):
         """
         stream = traverse(self.root, hint=self.hint_function)
         stream = normalize_paths(stream, prefix=self.root)
-        stream = filter_files(
+        return filter_files(
             stream,
             prefix=self.prefix,
-            suffix=self.suffix
+            suffix=self.suffix,
+            ignore=self.ignore_function
         )
-        for item in stream:
-            path = os.path.basename(item)
-            if any(ignore(path) for ignore in self.ignored):
-                continue
-            yield item
 
     def find_modules(self):
         """

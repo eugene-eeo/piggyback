@@ -60,6 +60,6 @@ class FinderFuncTest(unittest.TestCase):
             'tests/this/this/this/mpath.py',
             'tests/zpath.py',
         ]
-        iterable = filter_files(given, 'm', '.py')
+        iterable = filter_files(given, 'm', '.py', lambda x: False)
         expected = ['tests/this/this/this/mpath.py']
         assert list(iterable) == expected
