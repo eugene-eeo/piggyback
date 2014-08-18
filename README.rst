@@ -7,7 +7,7 @@
       |_|    |___/|___/ |__/ |__/
 
 
-**Supported Pythons:** 2.6+, 3.3+
+**Supported Pythons:** 2.6+, 3.2+
 
 Python package for finding modules recursively and then
 importing them. Useful for scripts/libraries which expose
