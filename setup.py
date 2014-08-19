@@ -10,5 +10,4 @@ setup(
     author_email='packwolf58@gmail.com',
     url='https://github.com/eugene-eeo/piggyback',
     packages=['piggyback'],
-    long_description=open('README.rst').read(),
 )
