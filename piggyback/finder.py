@@ -5,6 +5,12 @@ RE_IDENTIFIER = re.compile(r'^[^\d\W]\w*\Z')
 
 
 def is_identifier(path):
+    """
+    Returns true if the given item is an identifier, else
+    returns false.
+
+    :param path: The string to check.
+    """
     return bool(RE_IDENTIFIER.match(path))
 
 
