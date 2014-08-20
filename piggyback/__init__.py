@@ -9,4 +9,17 @@
     :license: MIT, see LICENSE for details.
 """
 
-__version__ = '0.1.2'
+from piggyback.loader import Loader
+from piggyback.finder import Finder
+
+__version__ = '0.1.3'
+
+
+def loader(path):
+    """
+    Creates a new loader object with the sane defaults of
+    the default Finder object.
+
+    :param path: The path to search.
+    """
+    return Loader(Finder(path))
