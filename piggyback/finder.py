@@ -1,4 +1,11 @@
+import re
 import os
+
+RE_IDENTIFIER = re.compile(r'^[^\d\W]\w*\Z')
+
+
+def is_identifier(path):
+    return bool(RE_IDENTIFIER.match(path))
 
 
 def traverse(path, hint):
@@ -18,8 +25,10 @@ def traverse(path, hint):
         if not item.startswith('.'):
             filepath = os.path.join(path, item)
             if os.path.isdir(filepath):
-                for item in traverse(filepath, hint):
-                    yield item
+                if not is_identifier(item):
+                    continue
+                for sub in traverse(filepath, hint):
+                    yield sub
                 continue
             yield filepath
 
