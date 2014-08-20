@@ -20,10 +20,9 @@ goals.
 
 .. code-block:: python
 
-    from piggyback.finder import Finder
-    from piggyback.lookup import Loader
+    from piggyback import loader
 
-    importer = Loader(Finder('path'))
+    importer = loader('path')
     for module in importer.search():
         print(module)
 
