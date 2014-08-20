@@ -1,6 +1,6 @@
 import unittest
 from piggyback.finder import Finder, traverse, normalize_paths,\
-    filter_files
+    filter_files, is_identifier
 
 
 class FinderTest(unittest.TestCase):
@@ -63,3 +63,10 @@ class FinderFuncTest(unittest.TestCase):
         iterable = filter_files(given, 'm', '.py', lambda x: False)
         expected = ['tests/this/this/this/mpath.py']
         assert list(iterable) == expected
+
+    def test_is_identifier(self):
+        valid = ['_ident', 'ident2', 'ide_nt3']
+        invalid = ['$this', '@that', '1thor']
+        for ident, not_ident in zip(valid, invalid):
+            assert is_identifier(ident)
+            assert not is_identifier(not_ident)
