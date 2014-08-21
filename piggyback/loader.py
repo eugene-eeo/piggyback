@@ -82,8 +82,8 @@ class Loader(object):
         the path intact, i.e. if you look for modules under
         `test` you will get `test.mod1`, `test.mod2`, etc.
         """
+        cache = {}
         with path_context(self.finder.path):
-            cache = {}
             for module in self.search():
                 cache[module] = import_module(module)
             return cache
