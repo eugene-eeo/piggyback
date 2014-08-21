@@ -30,9 +30,7 @@ def traverse(path, hint):
     for item in files:
         if not item.startswith('.'):
             filepath = os.path.join(path, item)
-            if os.path.isdir(filepath):
-                if not is_identifier(item):
-                    continue
+            if os.path.isdir(filepath) and is_identifier(item):
                 for sub in traverse(filepath, hint):
                     yield sub
                 continue
@@ -145,5 +143,7 @@ class Finder(object):
         a package.
         """
         if not self.is_package:
-            return [self.module_root]
-        return self.find_nested_modules()
+            yield self.module_root
+            return
+        for item in self.find_nested_modules():
+            yield item
