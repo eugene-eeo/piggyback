@@ -28,7 +28,8 @@ def to_module(path):
 
     :param path: The path to the module.
     """
-    return path[:-3].replace(os.path.sep, '.')
+    return (path.rstrip('.py')
+                .replace(os.path.sep, '.'))
 
 
 def import_module(module):
