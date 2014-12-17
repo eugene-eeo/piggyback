@@ -65,7 +65,7 @@ class FinderFuncTest(unittest.TestCase):
         assert list(iterable) == expected
 
     def test_is_identifier(self):
-        valid = ['_ident', 'ident2', 'ide_nt3']
+        valid = ['_ident', 'Ident2', 'ide_nt3']
         invalid = ['$this', '@that', '1thor']
         for ident, not_ident in zip(valid, invalid):
             assert is_identifier(ident)

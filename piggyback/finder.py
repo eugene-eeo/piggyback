@@ -1,7 +1,7 @@
 import re
 import os
 
-RE_IDENTIFIER = re.compile(r'^[^\d\W]\w*\Z')
+RE_IDENTIFIER = re.compile(r'[A-Za-z_]\w*\Z')
 
 
 def is_identifier(path):
