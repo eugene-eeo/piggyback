@@ -4,7 +4,7 @@ from piggyback.utils import module_name, PY_IDENT, PY_MODULE, ls
 
 class FileFinder(object):
     def __init__(self, path):
-        self.path, self.fname = split(self.filename)
+        self.path, self.fname = split(path)
 
     @property
     def modules(self):
