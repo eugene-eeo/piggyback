@@ -18,7 +18,9 @@ def ls(path, d_ok=(), f_ok=(), base=None):
                 yield k
             continue
         if all_ok(f_ok, item):
-            yield item if base is None else join(base, item)
+            if base is not None:
+                item = join(base, item)
+            yield item
 
 
 def module_name(path):
