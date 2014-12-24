@@ -12,16 +12,16 @@ class FileFinder(object):
 
 
 class ModuleFinder(object):
-    tree_filters = (
+    tree_filters = [
         lambda x: '__init__.py' in x,
         PY_IDENT.match,
-    )
-    file_filters = (
+    ]
+    file_filters = [
         lambda x: not x.startswith('.'),
         lambda x: not x.startswith('__'),
         lambda x: x.endswith('.py'),
         PY_MODULE.match,
-    )
+    ]
 
     def __init__(self, path):
         self.base = path

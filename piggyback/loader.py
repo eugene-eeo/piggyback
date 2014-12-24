@@ -14,7 +14,10 @@ def path_context(path):
 def import_module(path):
     mod = __import__(path, locals={}, globals={})
     for item in path.split('.')[1:]:
-        mod = getattr(mod, item)
+        try:
+            mod = getattr(mod, item)
+        except AttributeError:
+            raise ImportError('No module named %s' % path)
     return mod
 
 
