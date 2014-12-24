@@ -1,4 +1,4 @@
-from os.path import split
+from os.path import split, sep
 from piggyback.utils import module_name, PY_IDENT, PY_MODULE, ls
 
 
@@ -24,14 +24,15 @@ class ModuleFinder(object):
     )
 
     def __init__(self, path):
-        self.path = path
+        self.base = path
+        self.path, self.root = path.rstrip(sep).rsplit(sep, 1)
 
     @property
     def modules(self):
         iterable = ls(
-            path=self.path,
+            path=self.base,
             d_ok=self.tree_filters,
             f_ok=self.file_filters,
         )
         for item in iterable:
-            yield module_name(item)
+            yield '%s.%s' % (self.root, module_name(item))
