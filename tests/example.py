@@ -1,2 +1,2 @@
-def that():
-    pass
+const = 5
+delta = {}

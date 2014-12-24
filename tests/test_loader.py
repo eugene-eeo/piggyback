@@ -1,35 +1,18 @@
-import unittest
-from piggyback.finder import Finder
-from piggyback.loader import Loader
-
-dirloader = Loader(Finder('tests/examples'))
-fileloader = Loader(Finder('tests/example.py'))
+from pytest import raises
 
 
-class DirectoryLoaderTest(unittest.TestCase):
-    def test_look(self):
-        found = set(dirloader.search())
-        assert found == set(('examples.module', 'examples.nested.module'))
-
-    def test_import_all(self):
-        cache = dirloader.import_all()
-        for item in ('examples.module', 'examples.nested.module'):
-            assert item in cache
-
-        assert len(cache) == 2
-        assert cache['examples.module'].__name__ == 'examples.module'
-
-    def test_load(self):
-        assert dirloader.load('examples.module').this
-        assert dirloader.load('examples.nested.module')
+def test_search(loader):
+    for item in loader.search():
+        assert item in ['tests.conftest', 'tests.example']
 
 
-class FileLoaderTest(unittest.TestCase):
-    def test_look(self):
-        found = set(fileloader.search())
-        assert found == set(('example',))
+def test_import(loader):
+    prev = loader.import_all()['tests.example']
 
-    def test_import_all(self):
-        cache = fileloader.import_all()
-        assert len(cache) == 1
-        assert cache['example'].__name__ == 'example'
+    cache = loader.import_all()
+
+    assert 'tests.conftest' in cache
+    assert 'tests.example' in cache
+
+    assert cache['tests.example'].const == 5
+    assert cache['tests.example'].delta is prev.delta

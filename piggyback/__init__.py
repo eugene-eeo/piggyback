@@ -2,24 +2,27 @@
     piggyback
     ~~~~~~~~~
 
-    Easily import modules and scripts, and stop it with the
-    ugly ``execfiles`` and manual ``sys.path`` management.
+    A sane, robust, object oriented API to find and
+    import modules recursively.
 
-    :copyright: (c) 2014 Eugene Eeo
-    :license: MIT, see LICENSE for details.
+    :license: MIT, see LICENSE for details
+    :copyright: 2014 Eugene Eeo
 """
 
-from piggyback.loader import Loader
-from piggyback.finder import Finder
 
-__version__ = '0.1.3'
+import os.path as _path
+from piggyback.finder import FileFinder, ModuleFinder
+from piggyback.loader import Loader
 
 
 def loader(path):
     """
-    Creates a new loader object with the sane defaults of
-    the default Finder object.
+    Returns a loader object for a given path, with
+    the correct finder class (``ModuleFinder`` for
+    directories and ``FileFinder`` for single file
+    modules).
 
-    :param path: The path to search.
+    :param path: The path to the module(s).
     """
-    return Loader(Finder(path))
+    finder = ModuleFinder if _path.isdir(path) else FileFinder
+    return Loader(finder(_path.abspath(path)))
