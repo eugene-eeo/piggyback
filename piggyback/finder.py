@@ -1,5 +1,5 @@
 from os.path import split, sep
-from piggyback.utils import module_name, PY_IDENT, PY_MODULE, ls
+from piggyback.utils import to_module, PY_IDENT, PY_MODULE, ls
 
 
 class FileFinder(object):
@@ -8,7 +8,7 @@ class FileFinder(object):
 
     @property
     def modules(self):
-        return [module_name(self.fname)]
+        return [to_module(self.fname)]
 
 
 class ModuleFinder(object):
@@ -35,4 +35,4 @@ class ModuleFinder(object):
             f_ok=self.file_filters,
         )
         for item in iterable:
-            yield '%s.%s' % (self.root, module_name(item))
+            yield '%s.%s' % (self.root, to_module(item))

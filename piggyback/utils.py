@@ -23,5 +23,5 @@ def ls(path, d_ok=(), f_ok=(), base=None):
             yield item
 
 
-def module_name(path):
+def to_module(path):
     return path[:path.index('.py')].replace(sep, '.')
