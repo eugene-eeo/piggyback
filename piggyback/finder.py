@@ -3,7 +3,8 @@ from os.path import join, isdir, split
 from re import compile
 
 
-IDENT = compile(r'[a-zA-Z_][a-zA-Z0-9_]*\.py[c]{,1}')
+PY_IDENT = compile(r'[a-zA-Z_][a-zA-Z0-9_]*')
+PY_MODULE = compile(r'%s\.py[c]{,1}' % PY_IDENT.pattern)
 
 
 def all_ok(functions, item):
@@ -36,13 +37,13 @@ class FileFinder(object):
 class ModuleFinder(object):
     tree_filters = (
         lambda x: '__init__.py' in x,
-        IDENT.match,
+        PY_IDENT.match,
     )
     file_filters = (
         lambda x: not x.startswith('.'),
         lambda x: not x.startswith('__'),
         lambda x: x.endswith('.py'),
-        IDENT.match,
+        PY_MODULE.match,
     )
 
     def __init__(self, path):
