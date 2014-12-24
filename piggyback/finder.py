@@ -1,149 +1,53 @@
-import re
-import os
-
-RE_IDENTIFIER = re.compile(r'[A-Za-z_]\w*\Z')
+from os import listdir, sep
+from os.path import join, isdir, split
 
 
-def is_identifier(path):
-    """
-    Returns true if the given item is an identifier, else
-    returns false.
-
-    :param path: The string to check.
-    """
-    return bool(RE_IDENTIFIER.match(path))
+def all_ok(functions, item):
+    return all(f(item) for f in functions)
 
 
-def traverse(path, hint):
-    """
-    Traverse the directory (depth-first) recursively, and
-    yields all of the files of the directory.
-
-    :param path: The path.
-    :param hint_function: A function to determine whether
-        to traverse the current directory. It is called
-        with the contents of each directory.
-    """
-    files = os.listdir(path)
-    if not hint(files):
-        return
-    for item in files:
-        if not item.startswith('.'):
-            filepath = os.path.join(path, item)
-            if os.path.isdir(filepath) and is_identifier(item):
-                for sub in traverse(filepath, hint):
-                    yield sub
-                continue
-            yield filepath
+def ls(path, d_ok=(), f_ok=(), base=None):
+    for item in listdir(path):
+        if isdir(item) and all_ok(d_ok, item):
+            for k in ls(item, ok, item):
+                yield k
+            continue
+        if all_ok(f_ok, item):
+            yield item if base is None else join(base, item)
 
 
-def normalize_paths(stream, prefix):
-    """
-    Strip the paths from the stream of paths of a prefix.
-
-    :param stream: The stream of paths.
-    :param prefix: The prefix common to all of the paths
-        (this fact wouldn't be checked by the function).
-        It needn't end with the path separator.
-    """
-    length = len(prefix)
-    if not prefix.endswith(os.path.sep):
-        length += len(os.path.sep)
-    for filename in stream:
-        yield filename[length:]
+def module_name(path):
+    return path[:path.index('.py')].replace(sep, '.')
 
 
-def filter_files(stream, prefix, suffix, ignore):
-    """
-    Filters the files based on whether they start with a
-    prefix or end with a suffix.
-
-    :param stream: The stream of paths.
-    :param prefix: The desired prefix.
-    :param suffix: The desired suffix.
-    :param ignore: An ignore function- files will only
-        be yielded if the function doesn't return True.
-    """
-    for path in stream:
-        base = os.path.basename(path)
-        if base.startswith(prefix) and base.endswith(suffix):
-            if not ignore(base):
-                yield path
-
-
-_default_hint = lambda x: '__init__.py' in x
-_default_ignore = lambda x: x.startswith('__')
-
-
-class Finder(object):
-    """
-    Create a finder object for the given path.
-
-    :param path: The path.
-    :param prefix: Only load files with this prefix.
-    :param suffix: Only load files with this suffix (can be
-        combined with the prefix option).
-    """
-    def __init__(self, path, prefix='', suffix='.py'):
-        self.path = os.path.dirname(path)
-        self.root = os.path.abspath(path)
-
-        self.module_root = os.path.basename(path)
-        self.is_package = os.path.isdir(self.root)
-        self.prefix = prefix
-        self.suffix = suffix
-
-        self.hints = [_default_hint]
-        self.ignored = [_default_ignore]
+class FileFinder(object):
+    def __init__(self, path):
+        self.path, self.fname = split(self.filename)
 
     @property
-    def ignore_function(self):
-        """
-        Returns an ignore function for the finder object.
-        The ignore function checks if any of the functions
-        in the ``ignored`` attribute return True for a
-        given object.
-        """
-        def ignore(path):
-            return any(f(path) for f in self.ignored)
-        return ignore
+    def modules(self):
+        return [module_name(self.fname)]
+
+
+class ModuleFinder(object):
+    tree_filters = (
+        lambda x: '__init__.py' in x,
+    )
+    file_filters = (
+        lambda x: not x.startswith('.'),
+        lambda x: not x.startswith('__'),
+        lambda x: x.endswith('.py'),
+    )
+
+    def __init__(self, path):
+        self.path = path
 
     @property
-    def hint_function(self):
-        """
-        Returns the hint function for the finder object.
-        The hint function basically checks if the path
-        conforms to all of the hints in the `hints`
-        attribute.
-        """
-        def hint(path):
-            return all(f(path) for f in self.hints)
-        return hint
-
-    def find_nested_modules(self):
-        """
-        Look for nested modules. To be called only when
-        the finder object is a package (dictated by the
-        `is_package` property).
-        """
-        stream = traverse(self.root, hint=self.hint_function)
-        stream = normalize_paths(stream, prefix=self.root)
-        return filter_files(
-            stream,
-            prefix=self.prefix,
-            suffix=self.suffix,
-            ignore=self.ignore_function
+    def modules(self):
+        iterable = ls(
+            path=self.path,
+            d_ok=self.tree_filters,
+            f_ok=self.file_filters,
         )
-
-    def find_modules(self):
-        """
-        Search for the modules under path of the finder
-        object. Returns either the root path or the found
-        modules depending on whether the finder object is
-        a package.
-        """
-        if not self.is_package:
-            yield self.module_root
-            return
-        for item in self.find_nested_modules():
-            yield item
+        for item in iterable:
+            yield module_name(item)
