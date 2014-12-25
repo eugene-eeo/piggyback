@@ -10,7 +10,7 @@
 """
 
 
-import os.path as _path
+from os.path import isdir as _isdir
 from piggyback.finder import FileFinder, ModuleFinder
 from piggyback.loader import Loader
 
@@ -24,5 +24,5 @@ def loader(path):
 
     :param path: The path to the module(s).
     """
-    finder = ModuleFinder if _path.isdir(path) else FileFinder
-    return Loader(finder(_path.abspath(path)))
+    finder = ModuleFinder if _isdir(path) else FileFinder
+    return Loader(finder(path))

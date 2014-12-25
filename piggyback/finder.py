@@ -25,7 +25,7 @@ class ModuleFinder(object):
 
     def __init__(self, path):
         self.base = path
-        self.path, self.root = path.rstrip(sep).rsplit(sep, 1)
+        self.path, self.root = split(path.rstrip(sep))
 
     @property
     def modules(self):

@@ -28,9 +28,17 @@ class Loader(object):
     def search(self):
         return self.finder.modules
 
+    @property
+    def path(self):
+        return self.finder.path
+
     def import_all(self):
         cache = {}
-        with path_context(self.finder.path):
+        with path_context(self.path):
             for item in self.search():
                 cache[item] = import_module(item)
         return cache
+
+    def import_module(self, name):
+        with path_context(self.path):
+            return import_module(name)
