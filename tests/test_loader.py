@@ -7,7 +7,7 @@ def test_search(loader):
 
 
 def test_import_all(loader):
-    prev = loader.import_all()['tests.example']
+    prev = loader.get('tests.example')
     curr = loader.import_all()
 
     assert 'tests.conftest' in curr
@@ -19,6 +19,6 @@ def test_import_all(loader):
     assert example.delta is prev.delta
 
 
-def test_import_module(loader):
-    example = loader.import_module('tests.example')
+def test_get(loader):
+    example = loader.get('tests.example')
     assert example.const == 5
