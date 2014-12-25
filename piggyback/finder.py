@@ -3,8 +3,7 @@ from re import compile
 from piggyback.utils import to_module, ls
 
 
-PY_IDENT = compile(r'[a-zA-Z_][a-zA-Z0-9_]*')
-PY_MODULE = compile(r'%s\.py[c]{,1}' % PY_IDENT.pattern)
+IDENT = compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
 
 
 class FileFinder(object):
@@ -19,25 +18,29 @@ class FileFinder(object):
 class ModuleFinder(object):
     tree_filters = [
         lambda x: '__init__.py' in x,
-        PY_IDENT.match,
+        IDENT.match,
     ]
     file_filters = [
         lambda x: not x.startswith('.'),
         lambda x: not x.startswith('__'),
         lambda x: x.endswith('.py'),
-        PY_MODULE.match,
     ]
 
     def __init__(self, path):
         self.base = path
         self.path, self.root = split(path.rstrip(sep))
 
-    @property
-    def modules(self):
-        iterable = ls(
+    def find(self):
+        return ls(
             path=self.base,
             d_ok=self.tree_filters,
             f_ok=self.file_filters,
         )
-        for item in iterable:
-            yield '%s.%s' % (self.root, to_module(item))
+
+    @property
+    def modules(self):
+        for item in self.find():
+            module = to_module(item)
+            if not IDENT.match(module):
+                continue
+            yield '%s.%s' % (self.root, module)
