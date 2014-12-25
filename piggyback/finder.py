@@ -12,7 +12,7 @@ class FileFinder(object):
 
     @property
     def modules(self):
-        return [to_module(self.fname)]
+        yield to_module(self.fname)
 
 
 class ModuleFinder(object):
