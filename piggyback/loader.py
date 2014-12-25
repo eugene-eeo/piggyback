@@ -25,16 +25,16 @@ class Loader(object):
     def __init__(self, finder):
         self.finder = finder
 
-    def search(self):
-        return self.finder.modules
-
     @property
     def path(self):
         return self.finder.path
 
-    def import_all(self):
-        return dict((k, self.get(k)) for k in self.search())
+    def __iter__(self):
+        return self.finder.modules
 
-    def get(self, mod):
+    def __getitem__(self, name):
         with path_context(self.path):
-            return import_module(mod)
+            return import_module(name)
+
+    def import_all(self):
+        return dict((k, self[k]) for k in self)

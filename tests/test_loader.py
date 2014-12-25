@@ -2,12 +2,12 @@ from pytest import raises
 
 
 def test_search(loader):
-    for item in loader.search():
+    for item in loader:
         assert item in ['tests.conftest', 'tests.example']
 
 
 def test_import_all(loader):
-    prev = loader.get('tests.example')
+    prev = loader['tests.example']
     curr = loader.import_all()
 
     assert 'tests.conftest' in curr
@@ -20,5 +20,5 @@ def test_import_all(loader):
 
 
 def test_get(loader):
-    example = loader.get('tests.example')
+    example = loader['tests.example']
     assert example.const == 5

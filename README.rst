@@ -23,7 +23,7 @@ goals.
     from piggyback import loader
 
     importer = loader('path')
-    for module in importer.search():
+    for module in importer:
         print(module)
 
     cache = importer.import_all()
