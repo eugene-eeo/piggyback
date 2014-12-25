@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-import piggyback
 from distutils.core import setup
 
 setup(
     name='Piggyback',
-    version=piggyback.__version__,
+    version='0.2.0',
     description='Recursive module importer',
     author='Eugene Eeo',
     author_email='packwolf58@gmail.com',
