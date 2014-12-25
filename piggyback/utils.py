@@ -1,10 +1,5 @@
 from os import listdir, sep
 from os.path import isdir, join
-from re import compile
-
-
-PY_IDENT = compile(r'[a-zA-Z_][a-zA-Z0-9_]*')
-PY_MODULE = compile(r'%s\.py[c]{,1}' % PY_IDENT.pattern)
 
 
 def all_ok(functions, item):

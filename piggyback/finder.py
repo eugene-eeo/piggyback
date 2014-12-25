@@ -1,5 +1,10 @@
 from os.path import split, sep
-from piggyback.utils import to_module, PY_IDENT, PY_MODULE, ls
+from re import compile
+from piggyback.utils import to_module, ls
+
+
+PY_IDENT = compile(r'[a-zA-Z_][a-zA-Z0-9_]*')
+PY_MODULE = compile(r'%s\.py[c]{,1}' % PY_IDENT.pattern)
 
 
 class FileFinder(object):
