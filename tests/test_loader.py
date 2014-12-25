@@ -1,4 +1,13 @@
 from pytest import raises
+from piggyback.loader import Loader
+from piggyback.finder import FileFinder
+
+
+def test_single_file():
+    loader = Loader(FileFinder('tests/example.py'))
+
+    assert 'example' in loader
+    assert loader['example'].const == 5
 
 
 def test_search(loader):
