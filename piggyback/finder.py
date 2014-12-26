@@ -6,16 +6,20 @@ from piggyback.utils import to_module, ls
 IDENT = compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
 
 
-class FileFinder(object):
+class Finder(object):
+    pass
+
+
+class FileFinder(Finder):
     def __init__(self, path):
-        self.path, self.fname = split(path)
+        self.path, self.root = split(path)
 
     @property
     def modules(self):
-        yield to_module(self.fname)
+        yield to_module(self.root)
 
 
-class ModuleFinder(object):
+class ModuleFinder(Finder):
     tree_filters = [
         lambda x: '__init__.py' in x,
         IDENT.match,

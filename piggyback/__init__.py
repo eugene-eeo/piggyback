@@ -6,7 +6,7 @@
     import modules recursively.
 
     :license: MIT, see LICENSE for details
-    :copyright: 2014 Eugene Eeo
+    :copyright: (c) 2014 Eugene Eeo
 """
 
 
